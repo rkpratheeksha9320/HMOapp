@@ -8,7 +8,7 @@ const emotionInput = document.getElementById('emotion');
 // ---------- Spotify Connect Button ----------
 connectBtn.addEventListener('click', () => {
   const clientId = 'd69f805b88484d37a7e0652036112a40'; // your Spotify Client ID
-  const redirectUri = 'https://hm-oapp.vercel.app/api/auth/callback'; // works for localhost & Vercel
+  const redirectUri = window.location.origin; // works for localhost & Vercel
   const scopes = 'user-read-private user-read-email';
 
   const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}`;
@@ -22,10 +22,9 @@ function getSpotifyToken() {
   const params = new URLSearchParams(hash);
   const token = params.get('access_token');
   if (token) {
-    localStorage.setItem('spotifyToken', token); // save token locally
+    localStorage.setItem('spotifyToken', token); // save token
     status.innerText = 'Connected to Spotify! You can now search.';
-    // remove the token from URL
-    history.replaceState(null, '', window.location.pathname);
+    history.replaceState(null, '', window.location.pathname); // clean URL
   } else if (localStorage.getItem('spotifyToken')) {
     status.innerText = 'Connected to Spotify! You can now search.';
   }
@@ -49,7 +48,6 @@ searchBtn.onclick = async () => {
   results.innerHTML = '<em>Searching Spotify…</em>';
 
   try {
-    // Your API endpoint for playlists
     const r = await fetch(`/api/playlists?mood=${encodeURIComponent(mood)}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
