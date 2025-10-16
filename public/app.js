@@ -14,6 +14,19 @@ async function checkConnected(){
 }
 checkConnected();
 
+const connectBtn = document.getElementById('connectBtn');
+
+connectBtn.addEventListener('click', () => {
+  const clientId = 'd69f805b88484d37a7e0652036112a40'; // replace with your Spotify client ID
+  const redirectUri = 'https://hm-oapp.vercel.app/api/auth/callback'; // replace with your redirect URL
+  const scopes = 'user-read-private user-read-email';
+
+  const authUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}`;
+
+  window.location.href = authUrl;
+});
+
+
 searchBtn.onclick = async () => {
   const mood = emotionInput.value.trim();
   if (!mood) { alert('Type an emotion or sentence.'); return; }
